@@ -68,11 +68,15 @@ public class RegexFileFilter extends ClassNameFilter implements TestFilter {
 		FileReader fileReader = new FileReader(file);
 		try {
 			BufferedReader reader = new BufferedReader(fileReader);
-			String line;
-			do {
-				line = reader.readLine();
-				addFilter(line);
-			} while (line != null);
+			try {
+				String line;
+				do {
+					line = reader.readLine();
+					addFilter(line);
+				} while (line != null);
+			} finally {
+				reader.close();
+			}
 		} finally {
 			fileReader.close();
 		}

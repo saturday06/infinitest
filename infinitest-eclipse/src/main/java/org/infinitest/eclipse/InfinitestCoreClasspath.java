@@ -29,17 +29,20 @@ import java.net.*;
 import java.util.*;
 
 public class InfinitestCoreClasspath {
+	private static final Object JAR_FILE_LOCK = new Object();
 	private static File jarFile;
 
 	public static File getCoreJarLocation(InfinitestPlugin plugin) {
-		if ((jarFile == null) || !jarFile.exists()) {
-			File tempDir = new File(System.getProperty("java.io.tmpdir"));
-			jarFile = getNonConflictingJarFile(tempDir);
-			if (!jarFile.getParentFile().exists()) {
-				log(SEVERE, "No parent directory for " + jarFile);
-				throw new IllegalStateException("No parent directory for " + jarFile);
+		synchronized (JAR_FILE_LOCK) {
+			if ((jarFile == null) || !jarFile.exists()) {
+				File tempDir = new File(System.getProperty("java.io.tmpdir"));
+				jarFile = getNonConflictingJarFile(tempDir);
+				if (!jarFile.getParentFile().exists()) {
+					log(SEVERE, "No parent directory for " + jarFile);
+					throw new IllegalStateException("No parent directory for " + jarFile);
+				}
+				writeJar(jarFile, plugin);
 			}
-			writeJar(jarFile, plugin);
 		}
 		return jarFile;
 	}

@@ -132,8 +132,12 @@ public class InfinitestUtils {
 			} else {
 				try {
 					JarFile jarFile = new JarFile(each);
-					if (jarFile.getJarEntry(classToLookFor) != null) {
-						return convertFromWindowsClassPath(each);
+					try {
+						if (jarFile.getJarEntry(classToLookFor) != null) {
+							return convertFromWindowsClassPath(each);
+						}
+					} finally {
+						jarFile.close();
 					}
 				} catch (IOException e) {
 					log(WARNING, "Error reading jar file " + each + ": " + e.getMessage());

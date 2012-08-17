@@ -27,6 +27,7 @@ public class MultiCoreConcurrencyController implements ConcurrencyController {
 	public static final int DEFAULT_MAX_CORES = 8;
 
 	private int coreCount;
+	private final Object coreCountLock = new Object();
 	private final Semaphore semaphore;
 	private final int maxNumberOfPermits;
 
@@ -49,12 +50,14 @@ public class MultiCoreConcurrencyController implements ConcurrencyController {
 		semaphore.release();
 	}
 
-	public synchronized void setCoreCount(int newCoreCount) {
-		if (newCoreCount > maxNumberOfPermits) {
-			throw new IllegalArgumentException("Settings core count to " + newCoreCount + " max is " + maxNumberOfPermits);
+	public void setCoreCount(int newCoreCount) {
+		synchronized (coreCountLock) {
+			if (newCoreCount > maxNumberOfPermits) {
+				throw new IllegalArgumentException("Settings core count to " + newCoreCount + " max is " + maxNumberOfPermits);
+			}
+			releaseNecessaryPermits(newCoreCount);
+			acquireNecessaryPermits(newCoreCount);
 		}
-		releaseNecessaryPermits(newCoreCount);
-		acquireNecessaryPermits(newCoreCount);
 	}
 
 	private void acquireNecessaryPermits(int newCoreCount) {
@@ -77,6 +80,8 @@ public class MultiCoreConcurrencyController implements ConcurrencyController {
 	}
 
 	int getCoreCount() {
-		return coreCount;
+		synchronized (coreCountLock) {
+			return coreCount;
+		}
 	}
 }

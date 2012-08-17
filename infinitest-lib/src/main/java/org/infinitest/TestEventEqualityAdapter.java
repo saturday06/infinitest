@@ -25,7 +25,7 @@ import java.util.*;
 
 import org.infinitest.testrunner.*;
 
-import com.google.common.base.*;
+import com.google.common.base.Objects;
 
 public class TestEventEqualityAdapter {
 	private final TestEvent event;

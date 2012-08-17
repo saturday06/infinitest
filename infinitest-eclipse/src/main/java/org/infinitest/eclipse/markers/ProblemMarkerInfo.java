@@ -34,7 +34,7 @@ import org.eclipse.core.runtime.*;
 import org.infinitest.eclipse.workspace.*;
 import org.infinitest.testrunner.*;
 
-import com.google.common.base.*;
+import com.google.common.base.Objects;
 
 public class ProblemMarkerInfo extends AbstractMarkerInfo {
 	public static final String PICKLED_STACK_TRACE_ATTRIBUTE = "Pickled Stack Trace";

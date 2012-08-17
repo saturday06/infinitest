@@ -81,13 +81,17 @@ public class TestNGConfigurator {
 		FileReader fileReader = new FileReader(file);
 		try {
 			BufferedReader reader = new BufferedReader(fileReader);
-			String line;
-			do {
-				line = reader.readLine();
-				if (line != null) {
-					addFilter(line);
-				}
-			} while (line != null);
+			try {
+				String line;
+				do {
+					line = reader.readLine();
+					if (line != null) {
+						addFilter(line);
+					}
+				} while (line != null);
+			} finally {
+				reader.close();
+			}
 		} finally {
 			fileReader.close();
 		}
