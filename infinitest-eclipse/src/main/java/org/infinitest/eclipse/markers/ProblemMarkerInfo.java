@@ -29,6 +29,8 @@ import static org.infinitest.util.InfinitestUtils.*;
 
 import java.util.*;
 
+import junit.framework.*;
+
 import org.eclipse.core.resources.*;
 import org.eclipse.core.runtime.*;
 import org.infinitest.eclipse.workspace.*;
@@ -85,7 +87,7 @@ public class ProblemMarkerInfo extends AbstractMarkerInfo {
 
 	public Map<String, Object> attributes() {
 		Map<String, Object> markerAttributes = newLinkedHashMap();
-		markerAttributes.put(SEVERITY, SEVERITY_ERROR);
+		markerAttributes.put(SEVERITY, SEVERITY_INFO);
 		markerAttributes.put(MESSAGE, buildMessage(event));
 		markerAttributes.put(PICKLED_STACK_TRACE_ATTRIBUTE, getPickledStackTrace());
 		markerAttributes.put(TEST_NAME_ATTRIBUTE, event.getTestName());
@@ -101,9 +103,26 @@ public class ProblemMarkerInfo extends AbstractMarkerInfo {
 		return pickle(event.getStackTrace());
 	}
 
-	private String buildMessage(TestEvent anEvent) {
+	private String buildMessage2(TestEvent anEvent) {
 		PointOfFailure failure = anEvent.getPointOfFailure();
 		return anEvent.getErrorClassName() + getMessage(failure) + " in " + stripPackageName(event.getTestName()) + "." + anEvent.getTestMethod();
+	}
+
+	private String buildMessage(TestEvent anEvent) {
+		PointOfFailure failure = anEvent.getPointOfFailure();
+		String exceptionMessage = failure.getMessage();
+		if (isStringifiedNull(exceptionMessage)) {
+			exceptionMessage = "";
+		}
+		String message = "";
+		if (exceptionMessage.isEmpty()) {
+			message += anEvent.getErrorClassName();
+		} else if (anEvent.getErrorClassName().equals(AssertionFailedError.class.getSimpleName())) {
+			message += "\"" + exceptionMessage + "\"";
+		} else {
+			message += anEvent.getErrorClassName() + "(" + exceptionMessage + ")";
+		}
+		return message + " in " + stripPackageName(event.getTestName()) + "." + anEvent.getTestMethod();
 	}
 
 	private String getMessage(PointOfFailure failure) {

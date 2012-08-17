@@ -60,6 +60,24 @@
 									<outputDirectory>target/classes</outputDirectory>
 									<includes>**/*.*</includes>
 								</artifactItem>
+								<artifactItem>
+									<groupId>com.google.guava</groupId>
+									<artifactId>guava</artifactId>
+									<version>${guava.version}</version>
+									<type>jar</type>
+									<overWrite>false</overWrite>
+									<outputDirectory>target/classes</outputDirectory>
+									<includes>**/*.*</includes>
+								</artifactItem>
+								<artifactItem>
+									<groupId>com.android.ddmlib</groupId>
+									<artifactId>ddmlib</artifactId>
+									<version>r16</version>
+									<type>jar</type>
+									<overWrite>false</overWrite>
+									<outputDirectory>target/classes</outputDirectory>
+									<includes>**/*.*</includes>
+								</artifactItem>
 							</artifactItems>
 						</configuration>
 					</execution>
@@ -78,7 +96,6 @@
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
             <version>${guava.version}</version>
-            <scope>test</scope>
         </dependency>
 		<dependency>
 			<groupId>junit</groupId>
@@ -100,6 +117,11 @@
 			<groupId>com.beust</groupId>
 			<artifactId>jcommander</artifactId>
 			<version>1.12</version>
+		</dependency>
+		<dependency>
+			<groupId>com.android.ddmlib</groupId>
+			<artifactId>ddmlib</artifactId>
+			<version>r16</version>
 		</dependency>
 	</dependencies>
 </project>

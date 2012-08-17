@@ -38,4 +38,12 @@
 			</location>
 		</widget>
 	</extension>
+	<extension
+		point="org.eclipse.ui.editors.annotationTypes">
+		<type
+			markerType="org.infinitest.eclipse.marker"
+			super="org.eclipse.ui.workbench.texteditor.error"
+			name="org.infinitest.eclipse.annotationType.fixme">
+		</type>
+	</extension>
 </plugin>
