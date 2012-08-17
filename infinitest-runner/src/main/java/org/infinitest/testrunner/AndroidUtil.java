@@ -102,11 +102,24 @@ public class AndroidUtil {
 
 	public static IDevice getDevice() throws IOException, InterruptedException {
 		AndroidDebugBridge adb = getADB();
-		String serialNumber = getDeviceSerialNumber();
 
 		boolean connected = false;
 		do {
-			for (IDevice d : adb.getDevices()) {
+			IDevice[] devices = adb.getDevices();
+			String serialNumber = "";
+			try {
+				serialNumber = getDeviceSerialNumber();
+			} catch (IOException e) {
+				if (devices.length == 0) {
+					throw new IOException("device not found");
+				} else if (devices.length == 1) {
+					return devices[0];
+				} else {
+					throw new IOException("more than one device found");
+				}
+			}
+
+			for (IDevice d : devices) {
 				if (matchDeviceSerialNumber(serialNumber, d.getSerialNumber())) {
 					return d;
 				}
