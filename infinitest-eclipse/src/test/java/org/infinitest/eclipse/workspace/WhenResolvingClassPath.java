@@ -25,6 +25,8 @@ package org.infinitest.eclipse.workspace;
 import static org.fest.assertions.Assertions.*;
 import static org.mockito.Mockito.*;
 
+import java.io.*;
+
 import org.eclipse.core.runtime.*;
 import org.eclipse.jdt.core.*;
 import org.eclipse.jdt.launching.*;
@@ -65,7 +67,7 @@ public class WhenResolvingClassPath {
 
 		String classpath = classPathResolver.rawClasspath(mockProject);
 
-		assertThat(classpath).isEqualTo("1.jar:2.jar");
+		assertThat(classpath).isEqualTo("1.jar" + File.pathSeparator + "2.jar");
 	}
 
 	@Test
@@ -81,7 +83,7 @@ public class WhenResolvingClassPath {
 
 		String classpath = classPathResolver.rawClasspath(mockProject);
 
-		assertThat(classpath).isEqualTo("1.jar:2.jar:3.jar");
+		assertThat(classpath).isEqualTo("1.jar" + File.pathSeparator + "2.jar" + File.pathSeparator + "3.jar");
 	}
 
 	@Test
