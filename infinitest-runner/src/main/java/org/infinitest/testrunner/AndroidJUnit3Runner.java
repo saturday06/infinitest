@@ -6,9 +6,13 @@ public class AndroidJUnit3Runner implements NativeRunner {
 	public TestResults runTest(String testClass) {
 		try {
 			File d = AndroidUtil.getProjectDirectory();
-			if (!new File(d, "AndroidManifest.xml").exists()) {
+			File m = new File(d, "AndroidManifest.xml");
+			if (!m.exists()) {
+				AndroidUtil.log("!\"" + m + "\".exists()");
+				AndroidUtil.log(JUnit4Runner.class.getName());
 				return new JUnit4Runner().runTest(testClass);
 			}
+			AndroidUtil.log(AndroidJUnit3Runner.class.getName());
 			AndroidUtil.installAPK(d);
 			AndroidUtil.installAPK(AndroidUtil.getTestedProjectDirectory());
 			return new TestResults(AndroidUtil.runTests(testClass));
