@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <site>
-	<description url="http://infinitest.github.com">Infinitest Update Site</description>
+	<description url="https://ss1.xrea.com/www.lunaport.net/infinitest-android/">Infinitest-Android Update Site</description>
 	<feature url="features/${feature.id}_${plugin.version}.jar" id="${feature.id}" version="${plugin.version}">
 		<category name="Infinitest" />
 	</feature>
