@@ -229,7 +229,7 @@ public class AndroidUtil {
 				log("*** no match ***");
 				continue;
 			}
-			String declaringClass = m.group(1);
+			String declaringClass = m.group(1).replaceFirst("\\$[0-9]+$", "");
 			String methodName = m.group(2);
 			String fileName = m.group(3);
 			Integer lineNumber = 0;
@@ -385,25 +385,52 @@ public class AndroidUtil {
 	public static Throwable newThrowable(String className, String message, StackTraceElement[] stackTraceElements) {
 		Throwable t = new AssertionFailedError(className + (message.isEmpty() ? "" : ": " + message));
 		try {
-			Class<?> c = Class.forName(className);
-			Class<? extends Throwable> c2 = c.asSubclass(Throwable.class);
-			if (message.isEmpty()) {
-				t = c2.newInstance();
-			} else {
-				Constructor<? extends Throwable> ctor = c2.getConstructor(String.class);
-				t = ctor.newInstance(message);
+			Class<?> c;
+			try {
+				c = Class.forName(className);
+			} catch (ClassNotFoundException e) {
+				return t;
 			}
-		} catch (ClassCastException e) {
-		} catch (ClassNotFoundException e) {
-		} catch (IllegalAccessException e) {
-		} catch (IllegalArgumentException e) {
-		} catch (InstantiationException e) {
-		} catch (InvocationTargetException e) {
-		} catch (NoSuchMethodException e) {
-		} catch (SecurityException e) {
+
+			Class<? extends Throwable> c2;
+			try {
+				c2 = c.asSubclass(Throwable.class);
+			} catch (ClassCastException e) {
+				return t;
+			}
+			if (message.isEmpty()) {
+				try {
+					t = c2.newInstance();
+				} catch (InstantiationException e) {
+					return t;
+				} catch (IllegalAccessException e) {
+					return t;
+				}
+			} else {
+				Constructor<? extends Throwable> ctor;
+				try {
+					ctor = c2.getConstructor(String.class);
+				} catch (NoSuchMethodException e) {
+					return t;
+				} catch (SecurityException e) {
+					return t;
+				}
+				try {
+					t = ctor.newInstance(message);
+				} catch (InstantiationException e) {
+					return t;
+				} catch (IllegalAccessException e) {
+					return t;
+				} catch (IllegalArgumentException e) {
+					return t;
+				} catch (InvocationTargetException e) {
+					return t;
+				}
+			}
+			return t;
+		} finally {
+			t.setStackTrace(stackTraceElements);
 		}
-		t.setStackTrace(stackTraceElements);
-		return t;
 	}
 
 	public static File getProjectDirectory() throws IOException {
