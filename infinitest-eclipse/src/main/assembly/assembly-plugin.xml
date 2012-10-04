@@ -13,6 +13,17 @@
 			<includes>
 				<include>**/*</include>
 			</includes>
+			<excludes>
+				<exclude>**/*.class</exclude>
+			</excludes>
+		</fileSet>
+		<fileSet>
+			<filtered>false</filtered>
+			<directory>target/classes</directory>
+			<outputDirectory></outputDirectory>
+			<includes>
+				<include>**/*.class</include>
+			</includes>
 		</fileSet>
 		<fileSet>
 			<filtered>true</filtered>
