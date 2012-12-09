@@ -51,7 +51,10 @@ public class AndroidUtil {
 		String k = "sdk.dir";
 		String sdkDirString = p.getProperty(k);
 		if (sdkDirString == null) {
-			throw new IOException("property " + k + " not found");
+			sdkDirString = System.getenv("ANDROID_HOME");
+			if (sdkDirString == null) {
+				throw new IOException("property \"" + k + "\" nor env \"ANDROID_HOME\" not found");
+			}
 		}
 		File sdkDir = new File(sdkDirString);
 		if (!sdkDir.exists()) {
